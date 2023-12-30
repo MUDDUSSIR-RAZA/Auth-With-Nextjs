@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import axios from "axios";
+import { useRef } from "react";
 
 // const validatePassword = (password) => {
 //   if (password.length < 8) {
@@ -22,7 +23,6 @@ export default function signup() {
   const passwordRef = useRef();
   const repeatPasswordRef = useRef();
 
-
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
@@ -34,28 +34,20 @@ export default function signup() {
 
     const signupUser = async () => {
       try {
-        const response = await fetch("http://localhost:5000/auth/signUp", {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const response = await axios.post("http://localhost:5000/auth/signUp", {
+          email,
+          password,
         });
 
-        if (!response.ok) {
-          console.log(response);
-          throw (`HTTP error! Status: ${response.status}`);
-        }
-      
-        const data = await response.json();
-        console.log(data); 
-        
+        // if(!response.ok){
+          console.log(response.data);
+        // }
+
+
       } catch (error) {
-        console.log(error);
-        throw error;
+        console.error(error.response.data);;
       }
     };
-    
 
     // const passwordValidationMessage = validatePassword(password);
     // if (password !== repeatPassword || passwordValidationMessage) {
@@ -63,7 +55,6 @@ export default function signup() {
     //   return;
     // }
     signupUser();
-    
   };
   return (
     <>
